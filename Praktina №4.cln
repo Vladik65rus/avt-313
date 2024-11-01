@@ -1,0 +1,159 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public class Program
+{
+    public static void Main()
+    {
+        // Задание 1: Работа с массивом месяцев
+        string[] months = { "June", "July", "May", "December", "January", "February", "March", "April", "August", "September", "October", "November" };
+
+        // Запрос на выбор месяцев с длиной строки равной n
+        int n = 4;
+        var monthsWithLengthN = months.Where(month => month.Length == n);
+        Console.WriteLine($"Месяцы с длиной строки {n}: {string.Join(", ", monthsWithLengthN)}");
+
+        // Запрос на выбор летних и зимних месяцев
+        var summerAndWinterMonths = months.Where(month => month == "June" || month == "July" || month == "August" ||
+                                                           month == "December" || month == "January" || month == "February");
+        Console.WriteLine($"Летние и зимние месяцы: {string.Join(", ", summerAndWinterMonths)}");
+
+        // Запрос вывода месяцев в алфавитном порядке
+        var sortedMonths = months.OrderBy(month => month);
+        Console.WriteLine("Месяцы в алфавитном порядке: " + string.Join(", ", sortedMonths));
+
+        // Запрос, подсчитывающий месяцы, содержащие букву 'u' и длиной имени не менее 4-х
+        var monthsWithU = months.Count(month => month.Contains("u") && month.Length >= 4);
+        Console.WriteLine($"Количество месяцев, содержащих 'u' и длиной не менее 4 символов: {monthsWithU}");
+
+        // Задание 2: Создание класса Книга
+        var books = new List<Book>
+        {
+            new Book("Война и мир", "Лев Толстой", 1869, 1225, 1500),
+            new Book("Преступление и наказание", "Федор Достоевский", 1866, 671, 900),
+            new Book("Мастер и Маргарита", "Михаил Булгаков", 1967, 480, 700),
+            new Book("Анна Каренина", "Лев Толстой", 1878, 864, 1200),
+            new Book("Отцы и дети", "Иван Тургенев", 1862, 304, 500)
+        };
+
+        // Запросы LINQ для работы с коллекцией книг
+        // Список книг заданного автора
+        string author = "Лев Толстой";
+        var booksByAuthor = books.Where(book => book.Author == author);
+        Console.WriteLine($"\nКниги автора {author}:");
+        foreach (var book in booksByAuthor)
+        {
+            Console.WriteLine(book);
+        }
+
+        // Список книг, выпущенных после заданного года
+        int year = 1900;
+        var booksAfterYear = books.Where(book => book.Year > year);
+        Console.WriteLine($"\nКниги, выпущенные после {year} года:");
+        foreach (var book in booksAfterYear)
+        {
+            Console.WriteLine(book);
+        }
+
+        // Самая тонкая книга
+        var thinnestBook = books.OrderBy(book => book.Pages).FirstOrDefault();
+        Console.WriteLine($"\nСамая тонкая книга: {thinnestBook}");
+
+        // 5 первых самых толстых книг
+        var top5ThickestBooks = books.OrderByDescending(book => book.Pages).Take(5);
+        Console.WriteLine("\n5 самых толстых книг:");
+        foreach (var book in top5ThickestBooks)
+        {
+            Console.WriteLine(book);
+        }
+
+        // Список книг, отсортированных по цене
+        var booksSortedByPrice = books.OrderBy(book => book.Price);
+        Console.WriteLine("\nКниги, отсортированные по цене:");
+        foreach (var book in booksSortedByPrice)
+        {
+            Console.WriteLine(book);
+        }
+    }
+}
+
+public class Book
+{
+    private string _title;
+    private string _author;
+    private int _year;
+    private int _pages;
+    private decimal _price;
+
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Название книги не может быть пустым.");
+            _title = value;
+        }
+    }
+
+    public string Author
+    {
+        get => _author;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Имя автора не может быть пустым.");
+            _author = value;
+        }
+    }
+
+    public int Year
+    {
+        get => _year;
+        set
+        {
+            if (value < 0 || value > DateTime.Now.Year)
+                throw new ArgumentOutOfRangeException("Год издания некорректен.");
+            _year = value;
+        }
+    }
+
+    public int Pages
+    {
+        get => _pages;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException("Количество страниц должно быть положительным.");
+            _pages = value;
+        }
+    }
+
+    public decimal Price
+    {
+        get => _price;
+        set
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException("Цена не может быть отрицательной.");
+            _price = value;
+        }
+    }
+
+    public Book(string title, string author, int year, int pages, decimal price)
+    {
+        Title = title;
+        Author = author;
+        Year = year;
+        Pages = pages;
+        Price = price;
+    }
+
+    public override string ToString()
+    {
+        return $"{Title} - {Author}, {Year} год, {Pages} стр., Цена: {Price} руб.";
+    }
+}
