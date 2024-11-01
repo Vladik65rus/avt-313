@@ -1,0 +1,177 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+
+public class Program
+{
+    public static void Main()
+    {
+        // Задание 1: Работа с необобщенной коллекцией ArrayList
+        ArrayList arrayList = new ArrayList();
+        Random random = new Random();
+
+        // a) Заполнение ArrayList случайными целыми числами
+        for (int i = 0; i < 5; i++)
+        {
+            arrayList.Add(random.Next(1, 100));
+        }
+
+        // b) Добавление строки
+        arrayList.Add("Пример строки");
+
+        // c) Удаление заданного элемента (удалим первый элемент)
+        arrayList.RemoveAt(0);
+
+        // d) Вывод количества элементов и коллекции на консоль
+        Console.WriteLine("Задание 1: ArrayList");
+        Console.WriteLine($"Количество элементов: {arrayList.Count}");
+        Console.WriteLine("Коллекция ArrayList:");
+        foreach (var item in arrayList)
+        {
+            Console.WriteLine(item);
+        }
+
+        // e) Поиск заданного значения
+        Console.Write("Введите значение для поиска в ArrayList: ");
+        var searchValue = Console.ReadLine();
+        bool found = arrayList.Contains(searchValue);
+        Console.WriteLine(found ? "Значение найдено" : "Значение не найдено");
+
+        // Задание 2: Работа с обобщенными коллекциями Queue и Dictionary
+        Queue<int> queue = new Queue<int>();
+
+        // Заполнение Queue<int> данными
+        for (int i = 0; i < 5; i++)
+        {
+            queue.Enqueue(i + 1);
+        }
+
+        // a) Вывод Queue на консоль
+        Console.WriteLine("\nЗадание 2: Queue<int>");
+        foreach (var item in queue)
+        {
+            Console.WriteLine(item);
+        }
+
+        // b) Удаление из Queue n элементов
+        for (int i = 0; i < 2; i++)
+        {
+            queue.Dequeue();
+        }
+
+        // c) Добавление других элементов в Queue
+        queue.Enqueue(10);
+        queue.Enqueue(20);
+
+        // Создание Dictionary и заполнение данными из Queue
+        Dictionary<int, int> dictionary = new Dictionary<int, int>();
+        int key = 1;
+        foreach (var item in queue)
+        {
+            dictionary.Add(key++, item);
+        }
+
+        // e) Вывод Dictionary на консоль
+        Console.WriteLine("\nDictionary<int, int>:");
+        foreach (var kvp in dictionary)
+        {
+            Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+        }
+
+        // f) Поиск заданного значения в Dictionary
+        Console.Write("Введите значение для поиска в Dictionary: ");
+        int search = int.Parse(Console.ReadLine());
+        found = dictionary.ContainsValue(search);
+        Console.WriteLine(found ? "Значение найдено" : "Значение не найдено");
+
+        // Задание 3: Работа с пользовательским типом данных и интерфейсами
+        List<Person> people = new List<Person>
+        {
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35)
+        };
+
+        // Вывод коллекции людей
+        Console.WriteLine("\nЗадание 3: Коллекция людей:");
+        foreach (var person in people)
+        {
+            Console.WriteLine(person);
+        }
+
+        // Сортировка и вывод отсортированной коллекции
+        people.Sort();
+        Console.WriteLine("\nОтсортированная коллекция:");
+        foreach (var person in people)
+        {
+            Console.WriteLine(person);
+        }
+
+        // Клонирование объекта
+        Person clonedPerson = (Person)people[0].Clone();
+        Console.WriteLine("\nКлонированный объект:");
+        Console.WriteLine(clonedPerson);
+
+        // Задание 4: Работа с ObservableCollection
+        ObservableCollection<string> observableCollection = new ObservableCollection<string>();
+
+        // Регистрация обработчика событий
+        observableCollection.CollectionChanged += OnCollectionChanged;
+
+        // Добавление и удаление элементов для демонстрации
+        observableCollection.Add("Элемент 1");
+        observableCollection.Add("Элемент 2");
+        observableCollection.Remove("Элемент 1");
+    }
+
+    // Метод для события CollectionChanged в ObservableCollection
+    private static void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            Console.WriteLine("Добавлен элемент: " + e.NewItems[0]);
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            Console.WriteLine("Удален элемент: " + e.OldItems[0]);
+        }
+    }
+}
+
+// Пользовательский класс для задания 3
+public class Person : IComparable<Person>, ICloneable
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+
+    public Person(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+
+    public int CompareTo(Person other)
+    {
+        return Age.CompareTo(other.Age);
+    }
+
+    public object Clone()
+    {
+        return new Person(Name, Age);
+    }
+
+    public override string ToString()
+    {
+        return $"Name: {Name}, Age: {Age}";
+    }
+}
+
+public class AgeComparer : IComparer<Person>
+{
+    public int Compare(Person x, Person y)
+    {
+        return x.Age.CompareTo(y.Age);
+    }
+}
