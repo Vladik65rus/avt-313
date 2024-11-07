@@ -9,7 +9,7 @@ public class Program
     public static void Main()
     {
         // Задание 1: Работа с массивом месяцев
-        string[] months = { "June", "July", "May", "December", "January", "February", "March", "April", "August", "September", "October", "November" };
+        string[] months = { "Июнь", "Июль", "Май", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Август", "Сентябрь", "Октябрь", "Ноябрь" };
 
         // Запрос на выбор месяцев с длиной строки равной n
         int n = 4;
@@ -17,8 +17,8 @@ public class Program
         Console.WriteLine($"Месяцы с длиной строки {n}: {string.Join(", ", monthsWithLengthN)}");
 
         // Запрос на выбор летних и зимних месяцев
-        var summerAndWinterMonths = months.Where(month => month == "June" || month == "July" || month == "August" ||
-                                                           month == "December" || month == "January" || month == "February");
+        var summerAndWinterMonths = months.Where(month => month == "Июнь" || month == "Июль" || month == "Август" ||
+                                                           month == "Декабрь" || month == "Январь" || month == "Февраль");
         Console.WriteLine($"Летние и зимние месяцы: {string.Join(", ", summerAndWinterMonths)}");
 
         // Запрос вывода месяцев в алфавитном порядке
@@ -94,7 +94,7 @@ public class Book
         set
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Название книги не может быть пустым.");
+                throw new ArgumentException("Название книги не может быть пустое.");
             _title = value;
         }
     }
@@ -105,7 +105,7 @@ public class Book
         set
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Имя автора не может быть пустым.");
+                throw new ArgumentException("Имя автора не может быть пустое.");
             _author = value;
         }
     }
@@ -127,7 +127,7 @@ public class Book
         set
         {
             if (value <= 0)
-                throw new ArgumentOutOfRangeException("Количество страниц должно быть положительным.");
+                throw new ArgumentOutOfRangeException("Количество страниц должно быть положительное.");
             _pages = value;
         }
     }
@@ -138,7 +138,7 @@ public class Book
         set
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException("Цена не может быть отрицательной.");
+                throw new ArgumentOutOfRangeException("Цена не может быть отрицательное.");
             _price = value;
         }
     }
