@@ -3,10 +3,59 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Text;
+using System.Threading.Tasks;
 
 public class Program
 {
-    public static void Main()
+    static async Task Main(string[] args)
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+        while (true) // Бесконечный цикл
+        {
+            Console.WriteLine("Выберите задачу для выполнения:");
+            Console.WriteLine("1 - Задача 1: Работа с ArrayList");
+            Console.WriteLine("2 - Задача 2: Работа с Dictionary и Queue");
+            Console.WriteLine("3 - Задача 3: Работа с пользовательским типом данных Product");
+            Console.WriteLine("4 - Задача 4: Работа с ObservableCollection");
+            Console.WriteLine("0 - Выйти");
+
+            string choice = Console.ReadLine();
+            Task selectedTask = null;
+
+            switch (choice)
+            {
+                case "1":
+                    selectedTask = Task1();
+                    break;
+                case "2":
+                    selectedTask = Task2();
+                    break;
+                case "3":
+                    selectedTask = Task3();
+                    break;
+                case "4":
+                    selectedTask = Task4();
+                    break;
+                case "0":
+                    Console.WriteLine("Выход из программы.");
+                    return;
+                default:
+                    Console.WriteLine("Некорректный ввод. Попробуйте еще раз.");
+                    break;
+            }
+
+            if (selectedTask != null)
+            {
+                await selectedTask;
+                Console.WriteLine("Задача завершена.");
+            }
+
+            Console.WriteLine("");
+        }
+    }
+
+    static async Task Task1()
     {
         // Задание 1: Работа с необобщенной коллекцией ArrayList
         ArrayList arrayList = new ArrayList();
@@ -38,11 +87,15 @@ public class Program
         var searchValue = Console.ReadLine();
         bool found = arrayList.Contains(searchValue);
         Console.WriteLine(found ? "Значение найдено" : "Значение не найдено");
+    }
 
+    static async Task Task2()
+    {
         // Задание 2: Обобщенные коллекции Dictionary и Queue
         Dictionary<int, double> dictionary = new Dictionary<int, double>();
+        Random random = new Random();
 
-        // Заполнение Dictionary<double> данными
+        // Заполнение Dictionary данными
         for (int i = 0; i < 5; i++)
         {
             dictionary.Add(i, random.NextDouble() * 100);
@@ -82,15 +135,18 @@ public class Program
         // f) Поиск заданного значения в Queue
         Console.Write("Введите значение для поиска в Queue: ");
         double search = double.Parse(Console.ReadLine());
-        found = queue.Contains(search);
+        bool found = queue.Contains(search);
         Console.WriteLine(found ? "Значение найдено" : "Значение не найдено");
+    }
 
+    static async Task Task3()
+    {
         // Задание 3: Работа с пользовательским типом данных и интерфейсами
         List<Product> products = new List<Product>
         {
-            new Product("Laptop", 1000.99),
-            new Product("Tablet", 499.99),
-            new Product("Smartphone", 899.99)
+            new Product("Ноутбук", 89000),
+            new Product("Планшет", 99990),
+            new Product("Смартфон", 189999)
         };
 
         // Вывод коллекции продуктов
@@ -112,7 +168,10 @@ public class Program
         Product clonedProduct = (Product)products[0].Clone();
         Console.WriteLine("\nКлонированный объект:");
         Console.WriteLine(clonedProduct);
+    }
 
+    static async Task Task4()
+    {
         // Задание 4: Работа с ObservableCollection
         ObservableCollection<string> observableCollection = new ObservableCollection<string>();
 
