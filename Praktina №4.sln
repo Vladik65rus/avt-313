@@ -6,30 +6,70 @@ using System.Threading.Tasks;
 
 public class Program
 {
-    public static void Main()
+    private static readonly Dictionary<string, Func<Task>> TaskDict = new Dictionary<string, Func<Task>>
+{
+    { "1", Task1 },
+    { "2", Task2 }
+};
+
+    public static async Task Main(string[] args)
     {
-        // Задание 1: Работа с массивом месяцев
+        Console.OutputEncoding = Encoding.UTF8;
+
+        while (true)
+        {
+            Console.WriteLine("Выберите задачу для выполнения:");
+            foreach (var entry in TaskDict.Keys)
+                Console.WriteLine($"{entry} - Задача {entry}");
+            Console.WriteLine("0 - Выйти");
+
+            string choice = Console.ReadLine();
+            if (choice == "0")
+            {
+                Console.WriteLine("Выход из программы.");
+                break;
+            }
+            if (TaskDict.TryGetValue(choice, out var selectedTask))
+            {
+                await selectedTask();
+                Console.WriteLine("Задача завершена.");
+            }
+            else
+            {
+                Console.WriteLine("Некорректный ввод. Попробуйте еще раз.");
+            }
+
+            Console.WriteLine("");
+        }
+    }
+
+    static async Task Task1()
+    {
+        Console.WriteLine("Задача 1: Работа с массивом месяцев");
+
         string[] months = { "Июнь", "Июль", "Май", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Август", "Сентябрь", "Октябрь", "Ноябрь" };
 
-        // Запрос на выбор месяцев с длиной строки равной n
         int n = 4;
         var monthsWithLengthN = months.Where(month => month.Length == n);
         Console.WriteLine($"Месяцы с длиной строки {n}: {string.Join(", ", monthsWithLengthN)}");
 
-        // Запрос на выбор летних и зимних месяцев
         var summerAndWinterMonths = months.Where(month => month == "Июнь" || month == "Июль" || month == "Август" ||
                                                            month == "Декабрь" || month == "Январь" || month == "Февраль");
         Console.WriteLine($"Летние и зимние месяцы: {string.Join(", ", summerAndWinterMonths)}");
 
-        // Запрос вывода месяцев в алфавитном порядке
         var sortedMonths = months.OrderBy(month => month);
         Console.WriteLine("Месяцы в алфавитном порядке: " + string.Join(", ", sortedMonths));
 
-        // Запрос, подсчитывающий месяцы, содержащие букву 'u' и длиной имени не менее 4-х
         var monthsWithU = months.Count(month => month.Contains("u") && month.Length >= 4);
         Console.WriteLine($"Количество месяцев, содержащих 'u' и длиной не менее 4 символов: {monthsWithU}");
 
-        // Задание 2: Создание класса Книга
+        await Task.CompletedTask;
+    }
+
+    static async Task Task2()
+    {
+        Console.WriteLine("Задача 2: Работа с коллекцией книг");
+
         var books = new List<Book>
         {
             new Book("Война и мир", "Лев Толстой", 1869, 1225, 1500),
@@ -39,8 +79,6 @@ public class Program
             new Book("Отцы и дети", "Иван Тургенев", 1862, 304, 500)
         };
 
-        // Запросы LINQ для работы с коллекцией книг
-        // Список книг заданного автора
         string author = "Лев Толстой";
         var booksByAuthor = books.Where(book => book.Author == author);
         Console.WriteLine($"\nКниги автора {author}:");
@@ -49,7 +87,6 @@ public class Program
             Console.WriteLine(book);
         }
 
-        // Список книг, выпущенных после заданного года
         int year = 1900;
         var booksAfterYear = books.Where(book => book.Year > year);
         Console.WriteLine($"\nКниги, выпущенные после {year} года:");
@@ -58,11 +95,9 @@ public class Program
             Console.WriteLine(book);
         }
 
-        // Самая тонкая книга
         var thinnestBook = books.OrderBy(book => book.Pages).FirstOrDefault();
         Console.WriteLine($"\nСамая тонкая книга: {thinnestBook}");
 
-        // 5 первых самых толстых книг
         var top5ThickestBooks = books.OrderByDescending(book => book.Pages).Take(5);
         Console.WriteLine("\n5 самых толстых книг:");
         foreach (var book in top5ThickestBooks)
@@ -70,13 +105,14 @@ public class Program
             Console.WriteLine(book);
         }
 
-        // Список книг, отсортированных по цене
         var booksSortedByPrice = books.OrderBy(book => book.Price);
         Console.WriteLine("\nКниги, отсортированные по цене:");
         foreach (var book in booksSortedByPrice)
         {
             Console.WriteLine(book);
         }
+
+        await Task.CompletedTask;
     }
 }
 
