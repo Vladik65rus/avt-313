@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+/// FileInfo представляет данные о файле или каталоге.
 class FileInfo
 {
     public string Name { get; set; }
@@ -16,7 +17,8 @@ class FileInfo
         DateChanged = dateChanged;
         TimeChanged = timeChanged;
     }
-
+   ///-----------------------------------------------------------------------
+ 
     // Метод для определения, является ли текущий экземпляр каталогом
     public bool IsDirectory()
     {
@@ -26,20 +28,21 @@ class FileInfo
     // Display Name являеться ли элемнентом каталога
     public string DisplayName => IsDirectory() ? $"{Name}/" : Name;
 
+    /// Переопределение метода ToString
     public override string ToString()
     {
         return $"{DisplayName,-30}{(IsDirectory() ? "" : Size.ToString()),10}{DateChanged.ToShortDateString(),15}{TimeChanged}";
     }
 }
-
+/// Класс Program и метод Main
 class Program
 {
     static void Main(string[] args)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8; //encoding 
         Console.Title = "Midnight Commander";
-        Console.WindowWidth = 80;
-        Console.WindowHeight = 25;
+        Console.WindowWidth = 180;
+        Console.WindowHeight = 180;
 
         Console.BackgroundColor = ConsoleColor.DarkBlue;
         Console.ForegroundColor = ConsoleColor.Gray;
