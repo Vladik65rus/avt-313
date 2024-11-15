@@ -1,102 +1,113 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace praktica2
+namespace Massiv
 {
     class Program
     {
-        static async Task Main() // Начало
+        // Главная точка входа программы
+        static async Task Main() // Асинхронный метод для запуска программы
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            while (true) // Бесконечный цикл
+            Console.OutputEncoding = Encoding.UTF8; // Установка кодировки UTF-8 для корректного отображения кириллицы
+
+            // Бесконечный цикл для отображения меню и выполнения выбранных задач
+            while (true)
             {
+                // Вывод меню на экран
                 Console.WriteLine("Выберите задачу для выполнения:");
                 Console.WriteLine("1 - Задача 1");
                 Console.WriteLine("2 - Задача 2");
                 Console.WriteLine("3 - Задача 3");
-                Console.WriteLine("4 - Задача 4");
                 Console.WriteLine("0 - Выйти");
 
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine(); // Чтение выбора пользователя
                 Task selectedTask = null;
 
+                // Обработка выбора пользователя
                 switch (choice)
                 {
                     case "1":
-                        selectedTask = Task1();
+                        selectedTask = Task1(); // Вызов метода для задачи 1
                         break;
                     case "2":
-                        selectedTask = Task2();
+                        selectedTask = Task2(); // Вызов метода для задачи 2
                         break;
                     case "3":
-                        selectedTask = Task3();
-                        break;
-                    case "4":
-                        selectedTask = Task4();
+                        selectedTask = Task3(); // Вызов метода для задачи 3
                         break;
                     case "0":
-                        Console.WriteLine("Выход из программы.");
-                        return;
+                        Console.WriteLine("Выход из программы."); // Вывод сообщения при выходе из программы
+                        return; // Завершение программы
                     default:
-                        Console.WriteLine("Некорректный ввод. Попробуйте еще раз.");
+                        Console.WriteLine("Некорректный ввод. Попробуйте еще раз."); // Сообщение об ошибке при некорректном вводе
                         break;
                 }
 
+                // Ожидание завершения выбранной задачи
                 if (selectedTask != null)
                 {
-                    await selectedTask;
-                    Console.WriteLine("Задача завершена.");
+                    await selectedTask; // Ожидание выполнения задачи
+                    Console.WriteLine("Задача завершена."); // Сообщение о завершении задачи
                 }
 
-                Console.WriteLine("");
+                Console.WriteLine(""); // Пустая строка для разделения вывода между выполненными задачами
             }
         }
 
-        static Task Task1() // Задача 1
+        // Задача 1: Заполнение массива и вывод в обратном порядке
+        static async Task Task1()
         {
-            // Вывод массива на экран
+            // Вывод информации о задаче
             Console.WriteLine("Задача 1: Заполнение массива по размерности N:");
-            Console.Write("Введите размер массива N: ");
-            if (!int.TryParse(Console.ReadLine(), out int N) || N <= 0)
-            {
-                Console.WriteLine("Некорректный ввод. Введите положительное число.");
-                return Task.CompletedTask;
-            }
+            System.Console.OutputEncoding = System.Text.Encoding.UTF8; // Установка кодировки для корректного отображения
 
-            // Создаем массив размерности N
+            Console.Write("Введите размер массива N: ");
+            int N = int.Parse(Console.ReadLine()); // Чтение размера массива
+
+            // Создание массива размерностью N
             int[] array = new int[N];
 
-            // Заполняем массив числами от 1 до N
+            // Заполнение массива числами от 1 до N
             for (int i = 0; i < N; i++)
             {
-                array[i] = i + 1;
+                array[i] = i + 1; // Заполнение массива
             }
 
-            // Выводим элементы массива в обратном порядке
+            // Вывод элементов массива в обратном порядке
             Console.WriteLine("Элементы массива в обратном порядке:");
             for (int i = N - 1; i >= 0; i--)
             {
-                Console.Write(array[i] + " ");
+                Console.Write(array[i] + " "); // Печать элементов массива
             }
-            Console.WriteLine();
-            return Task.CompletedTask;
+            Console.WriteLine(); // Переход на новую строку
         }
 
-        static Task Task2() // Задача 2
+        // Задача 2: Заполнение двумерного массива по шаблону
+        static async Task Task2()
         {
-            int rows = 5;
-            int columns = 5;
+            int rows = 5; // Количество строк в массиве
+            int columns = 5; // Количество столбцов в массиве
 
-            // Создаем массив
-            int[,] square = new int[rows, columns];
+            // Создание двумерного массива
+            int[,] aquare = new int[rows, columns];
 
-            // Заполняем массив
+            // Заполнение массива по шаблону
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    square[i, j] = j >= i ? 1 : 0;
+                    // Если индекс столбца больше или равен индексу строки, то присваиваем 1
+                    if (j >= i)
+                    {
+                        aquare[i, j] = 1;
+                    }
+                    else
+                    {
+                        aquare[i, j] = 0; // В остальных случаях присваиваем 0
+                    }
                 }
             }
 
@@ -106,85 +117,88 @@ namespace praktica2
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    Console.Write(square[i, j] + " ");
+                    Console.Write(aquare[i, j] + " "); // Вывод элемента массива с пробелом
                 }
-                Console.WriteLine();
+                Console.WriteLine(); // Переход на новую строку после вывода каждого ряда
             }
-            return Task.CompletedTask;
         }
 
-        static Task Task3() // Задача 3
+        // Задача 3: Заполнение двумерного массива по спирали
+        static async Task Task3()
         {
             int n = 5; // Размерность массива
-            int[,] spiralArray = new int[n, n];
+            int[,] spiralArray = new int[n, n]; // Инициализация двумерного массива
 
+            // Заполнение массива по спирали
             FillSpiral(spiralArray, n);
-            Console.WriteLine("\nЗадача 3: Заполнение массива спиралью:");
-            PrintArray(spiralArray);
 
-            return Task.CompletedTask;
+            // Вывод заполненного массива
+            Console.WriteLine("\nЗадача 3: Заполнение массива спиралью:");
+            PrintArray(spiralArray); // Печать массива
         }
 
+        // Метод для заполнения массива по спирали
         static void FillSpiral(int[,] array, int n)
         {
-            int value = 1;
-            int top = 0, bottom = n - 1, left = 0, right = n - 1;
+            int value = 1; // Начальное значение для заполнения массива
+            int top = 0, bottom = n - 1, left = 0, right = n - 1; // Границы массива
 
-            while (value <= n * n)
+            while (value <= n * n) // Заполняем массив до последнего элемента
             {
                 // Заполнение верхней строки
                 for (int i = left; i <= right; i++)
                 {
-                    array[top, i] = value++;
+                    array[top, i] = value++; // Присваиваем значения в верхней строке
                 }
-                top++;
+                top++; // Сдвигаем верхнюю границу вниз
 
                 // Заполнение правого столбца
                 for (int i = top; i <= bottom; i++)
                 {
-                    array[i, right] = value++;
+                    array[i, right] = value++; // Присваиваем значения в правый столбец
                 }
-                right--;
+                right--; // Сдвигаем правую границу влево
 
                 // Заполнение нижней строки
-                if (top <= bottom)
+                if (top <= bottom) // Проверка, есть ли еще строки для заполнения
                 {
                     for (int i = right; i >= left; i--)
                     {
-                        array[bottom, i] = value++;
+                        array[bottom, i] = value++; // Присваиваем значения в нижнюю строку
                     }
-                    bottom--;
+                    bottom--; // Сдвигаем нижнюю границу вверх
                 }
 
                 // Заполнение левого столбца
-                if (left <= right)
+                if (left <= right) // Проверка, есть ли еще столбцы для заполнения
                 {
                     for (int i = bottom; i >= top; i--)
                     {
-                        array[i, left] = value++;
+                        array[i, left] = value++; // Присваиваем значения в левый столбец
                     }
-                    left++;
+                    left++; // Сдвигаем левую границу вправо
                 }
             }
         }
 
+        // Метод для вывода двумерного массива на экран
         static void PrintArray(int[,] array)
         {
-            int n = array.GetLength(0);
+            int n = array.GetLength(0); // Получаем размерность массива
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    Console.Write(array[i, j] + "\t");
+                    Console.Write(array[i, j] + "\t"); // Печать элемента массива с табуляцией
                 }
-                Console.WriteLine();
+                Console.WriteLine(); // Переход на новую строку после вывода ряда
             }
         }
 
-        static Task Task4() // Задача 4 - Пустой метод
+        // Задача 4: Пустая задача
+        static async Task Task4()
         {
-            Console.WriteLine("\nЗадача 4: (Пустой метод)");
-            return Task.CompletedTask;
+            // Пустой метод, не выполняет действий
         }
     }
 }
