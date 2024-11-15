@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-/// FileInfo представляет данные о файле или каталоге.
 class FileInfo
 {
-    public string Name { get; set; }
-    public long Size { get; set; } // размер  в байтах 
-    public DateTime DateChanged { get; set; } // Дата последнего измения 
+    // Свойства файла или каталога
+    public string Name { get; set; } // Имя файла или каталога
+    public long Size { get; set; } // Размер файла в байтах (отрицательное значение для каталогов)
+    public DateTime DateChanged { get; set; } // Дата последнего изменения
     public TimeSpan TimeChanged { get; set; } // Время последнего изменения
 
+    // Конструктор класса FileInfo
     public FileInfo(string name, long size, DateTime dateChanged, TimeSpan timeChanged)
     {
         Name = name;
@@ -17,85 +18,87 @@ class FileInfo
         DateChanged = dateChanged;
         TimeChanged = timeChanged;
     }
-   ///-----------------------------------------------------------------------
- 
-    // Метод для определения, является ли текущий экземпляр каталогом
+
+    // Метод для проверки, является ли текущий объект каталогом
     public bool IsDirectory()
     {
-        return Size < 0; // Использование < 0 для определения каталогов
+        return Size < 0; // Каталог определяется отрицательным значением Size
     }
 
-    // Display Name являеться ли элемнентом каталога
+    // Свойство, которое добавляет "/" к имени каталога для визуального отличия
     public string DisplayName => IsDirectory() ? $"{Name}/" : Name;
 
-    /// Переопределение метода ToString
+    // Метод ToString для форматированного вывода информации о файле/каталоге
     public override string ToString()
     {
+        // Применение ToShortDateString для форматированного отображения даты
         return $"{DisplayName,-30}{(IsDirectory() ? "" : Size.ToString()),10}{DateChanged.ToShortDateString(),15}{TimeChanged}";
     }
 }
-/// Класс Program и метод Main
+
 class Program
 {
     static void Main(string[] args)
     {
-        Console.OutputEncoding = System.Text.Encoding.UTF8; //encoding 
+        // Настройки консоли
+        Console.OutputEncoding = System.Text.Encoding.UTF8; // Кодировка UTF-8 для корректного отображения символов
         Console.Title = "Midnight Commander";
         Console.WindowWidth = 180;
-        Console.WindowHeight = 180;
+        Console.WindowHeight = 40;
 
-        Console.BackgroundColor = ConsoleColor.DarkBlue;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;    
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.Clear();
 
-        // Моделирование списка файлов и каталогов
+        // Список файлов и каталогов, созданный для моделирования интерфейса
         List<FileInfo> files = new List<FileInfo>
         {
-            new FileInfo("MyDocument.txt", 2048, DateTime.Now.AddDays(-5), new TimeSpan(14, 30, 0)),
-            new FileInfo("Report.pdf", 10240, DateTime.Now.AddDays(-2), new TimeSpan(9, 15, 0)),
-            new FileInfo("Image.png", 512, DateTime.Now.AddDays(-10), new TimeSpan(10, 45, 0)),
-            new FileInfo("MyFileWithLongName.txt", 3072, DateTime.Now, new TimeSpan(11, 30, 0)),
-            new FileInfo("Data", -1, DateTime.Now.AddDays(-1), new TimeSpan(20, 0, 0)), // Каталог
-            new FileInfo("AnotherLongFileNameThatNeedsAbbreviating.txt", 4096, DateTime.Now.AddDays(-3), new TimeSpan(15, 0, 0)),
-            new FileInfo("Sample.txt", 512, DateTime.Now.AddDays(-4), new TimeSpan(16, 30, 0)),
-            new FileInfo("Directory1", -1, DateTime.Now.AddDays(-7), new TimeSpan(10, 0, 0)), // Каталог
-            new FileInfo("disn.txt", 2014, DateTime.Now.AddDays(-8), new TimeSpan(10, 0, -0)),
-            new FileInfo("home.png", 2048, DateTime.Now.AddDays(-24), new TimeSpan(12, 0, -0)),
+            new FileInfo("Document.txt", 2048, DateTime.Now.AddDays(-5), new TimeSpan(12, 30, 0)),
+            new FileInfo("Match.pdf", 10240, DateTime.Now.AddDays(-2), new TimeSpan(9, 15, 0)),
+            new FileInfo("Auto.png", 512, DateTime.Now.AddDays(-10), new TimeSpan(11, 25, 0)),
+            new FileInfo("MyDocuments.txt", 3072, DateTime.Now, new TimeSpan(11, 30, 0)),
+            new FileInfo("Temp", -1, DateTime.Now.AddDays(-1), new TimeSpan(21, 0, 0)), // Каталог
+            new FileInfo("My ISO Files", 4096, DateTime.Now.AddDays(-3), new TimeSpan(06, 0, 0)),
+            new FileInfo("Data", 512, DateTime.Now.AddDays(-4), new TimeSpan(19, 30, 0)),
+            new FileInfo("Games", -1, DateTime.Now.AddDays(-7), new TimeSpan(17, 0, 0)), // Каталог
+            new FileInfo("Proga.txt", 2014, DateTime.Now.AddDays(-8), new TimeSpan(07, 0, 0)),
+            new FileInfo("Green.png", 2048, DateTime.Now.AddDays(-24), new TimeSpan(22, 0, 0)),
         };
 
-        //  Сортировка файлов по имени
+        // Сортировка файлов по имени
         var sortedFiles = files.OrderBy(f => f.Name).ToList();
-        int fileCount = Math.Min(10, sortedFiles.Count); // Отображение первых 10 файлов
+        int fileCount = Math.Min(10, sortedFiles.Count); // Ограничение вывода первых 10 файлов
 
-        // Отображение интерфейса
+        // Вызов метода для отображения интерфейса
         DisplayInterface(sortedFiles, fileCount);
     }
 
+    // Метод для вывода интерфейса файлового менеджера
     static void DisplayInterface(IEnumerable<FileInfo> files, int fileCount)
     {
         Console.Clear();
-        Console.BackgroundColor = ConsoleColor.DarkBlue; // Устанавливаем синий цвет фона
-        Console.ForegroundColor = ConsoleColor.Gray; // Цвет текста для контраста
+        Console.BackgroundColor = ConsoleColor.DarkBlue; // Цвет фона
+        Console.ForegroundColor = ConsoleColor.Gray; // Цвет текста
 
-        // Отображение заголовка  
+        // Заголовок интерфейса
         Console.WriteLine($"\u2593▓{"Левая▓▓▓▓▓"}{"Файл▓▓▓▓▓▓▓▓▓▓"}{"Диск▓▓▓▓▓▓▓▓▓▓"}{"Команды▓▓▓▓▓▓▓▓▓▓▓▓"}{"Правая"}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
 
-        // верхняя граница
+        // Верхняя граница таблицы
         Console.WriteLine($"▓\u2554══════════════════════════════════════════════════════╗ ╔═════════════════════════════════════════════════╗▓");
         Console.WriteLine($"▓║                                                      ║ ║                                                 ║▓");
 
-        // Отображение меток столбцов
+        // Метки столбцов
         Console.WriteLine($"▓╠═══════  {"Имя C:/",-10}═════\u2557 \u2554═ {"Размер",-7}═╗ \u2554═══{"Дата",6} ════╣ \u2560 {"Время",5} ═╗                                        ║▓");
 
-        // Отображение файлов и каталогов
+        // Цикл для вывода каждого файла/каталога
         foreach (var file in files)
         {
-            // Сокращение длинны имени файла
+            // Сокращение имени файла, если оно длинное
             string displayName = file.DisplayName.Length > 25
                 ? $"{file.DisplayName.Substring(0, 22)}~"
                 : file.DisplayName;
 
-            // подстроение формата
+            // Форматированный вывод информации о файле/каталоге
             string output = $"▓\u2551{displayName,-23} \u2551 " +
                             $"║{(file.IsDirectory() ? string.Empty : file.Size.ToString()),9} ║ " +
                             $"║{file.DateChanged.ToShortDateString(),12}  ║" +
@@ -104,15 +107,16 @@ class Program
             Console.WriteLine(output);
         }
 
-        // нижняя Часть таблицы
+        // Нижняя граница таблицы
         Console.WriteLine($"▓\u255A════════════════════════\u2569═╩══════════╩═╩══════════════\u255D ╚════════╩════════════════════════════════════════╝▓");
 
+        // Отображение текущей даты
         Console.WriteLine($"▓             Каталог: {DateTime.Now}                            Каталог: {DateTime.Now}           ▓");
 
-        //  нижняя граница
+        // Нижняя граница интерфейса
         Console.WriteLine($"▓\u255A══════════════════════════════════════════════════════════════════════════════════════════════════════════╝▓");
 
-        //  Отображение нижнего меню
+        // Нижнее меню команд
         Console.WriteLine($"▓{"1 Помощь",-10}{"2 Вызовы",-10}{"3 Чтение",-10}{"4 Правка",-10}{"5 Копия",-10}{"6 НовИмя",-10}{"7 НовКат",-10}{"8 Удал-е",-10}{"9 Меню",-10}{"10 выход",-10}        ▓");
         Console.WriteLine($"▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
     }
