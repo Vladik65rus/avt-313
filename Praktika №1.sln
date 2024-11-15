@@ -58,8 +58,8 @@ class Program
             new FileInfo("Auto.png", 512, DateTime.Now.AddDays(-10), new TimeSpan(11, 25, 0)),
             new FileInfo("MyDocuments.txt", 3072, DateTime.Now, new TimeSpan(11, 30, 0)),
             new FileInfo("Temp", -1, DateTime.Now.AddDays(-1), new TimeSpan(21, 0, 0)), // Каталог
-            new FileInfo("My ISO Files", 4096, DateTime.Now.AddDays(-3), new TimeSpan(06, 0, 0)),
-            new FileInfo("Data", 512, DateTime.Now.AddDays(-4), new TimeSpan(19, 30, 0)),
+            new FileInfo("My ISO Files", -1, DateTime.Now.AddDays(-3), new TimeSpan(06, 0, 0)),
+            new FileInfo("Data", -1, DateTime.Now.AddDays(-4), new TimeSpan(19, 30, 0)),
             new FileInfo("Games", -1, DateTime.Now.AddDays(-7), new TimeSpan(17, 0, 0)), // Каталог
             new FileInfo("Proga.txt", 2014, DateTime.Now.AddDays(-8), new TimeSpan(07, 0, 0)),
             new FileInfo("Green.png", 2048, DateTime.Now.AddDays(-24), new TimeSpan(22, 0, 0)),
